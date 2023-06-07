@@ -1,0 +1,10 @@
+1. Functions
+  In JS, everything is treated like an object.
+  Therefore, a function is also treated like an object, unlike any other programming language.
+
+2. Objects
+  In JS, a JS object is like a key-value pair, where the key is always a string, and the value
+  can be any JS object.
+  Python: Dictionary
+  Java: Map<String, Object> // JS has a Map like Java also
+  C++: ordered_map<string, object>
