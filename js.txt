@@ -8,3 +8,6 @@
   Python: Dictionary
   Java: Map<String, Object> // JS has a Map like Java also
   C++: ordered_map<string, object>
+
+Fruit Basket A: Mango, Banana, Apple, Orange, Kiwi
+Fruit Basket B: Mango, Banana, Apple, Orange, Kiwi

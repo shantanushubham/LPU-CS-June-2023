@@ -1,0 +1,15 @@
+1. GET
+This type is used when we want to fetch some information from the server.
+DOES NOT ACCEPT Request Body
+
+2. POST
+This type is used when we want to create something or add something inside the server.
+
+3. PUT
+This type is used when we want to update some information inside the server.
+
+4. DELETE
+This type is used when we want to delete something from the server.
+
+5. PATCH
+This type is used when we want to partially update something.
