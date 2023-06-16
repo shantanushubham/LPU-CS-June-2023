@@ -1,0 +1,4 @@
+Create a new Node Application, called test-app
+Call your weather-app's API to get weather inside test-app.
+Take address as request body.
+Append in the response from test-app a new key value pair, where, key -> source and value -> test-app
