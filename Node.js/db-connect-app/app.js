@@ -48,12 +48,23 @@ const myFunction = async () => {
 
     // DELETE START
 
-    const deleteResult = await userCollection.deleteMany({
-      _id: new ObjectId("649064d6fc5641c65261aa00"),
-    });
-    console.log(deleteResult);
+    // const deleteResult = await userCollection.deleteMany({
+    //   _id: new ObjectId("649064d6fc5641c65261aa00"),
+    // });
+    // console.log(deleteResult);
 
     // DELETE END
+
+    // UPDATE START
+
+    const updateResult = await userCollection.updateMany(
+      {},
+      { $inc: { age: 1 } }
+    );
+    console.log(updateResult);
+
+    // UPDATE END
+    
   } catch (err) {
     console.error(err);
   }
