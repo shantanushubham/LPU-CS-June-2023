@@ -3,9 +3,11 @@ require("./mongooseFile");
 const express = require("express");
 const app = express();
 const userRoute = require("./routes/user-routes");
+const taskRoute = require("./routes/task-routes");
 app.use(express.json());
 
 app.use("/user", userRoute);
+app.use("/task", taskRoute);
 
 const PORT = 8080;
 

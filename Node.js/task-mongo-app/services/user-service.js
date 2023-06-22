@@ -13,6 +13,10 @@ const getUserById = async (id) => {
   return user;
 };
 
+const getAllUsers = async () => {
+  return await userRepository.getAllUsers();
+};
+
 const updateUserById = async (userId, dataToUpdate) => {
   let updateObject = {};
   USER_EDITABLE_FIELDS.forEach(
@@ -34,4 +38,10 @@ const deleteUserById = async (userId) => {
   return isDeleted;
 };
 
-module.exports = { addNewUser, getUserById, updateUserById, deleteUserById };
+module.exports = {
+  addNewUser,
+  getUserById,
+  getAllUsers,
+  updateUserById,
+  deleteUserById,
+};

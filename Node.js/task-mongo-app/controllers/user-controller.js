@@ -18,6 +18,17 @@ const addNewUser = async (req, res) => {
   }
 };
 
+const getAllUsers = async (req, res) => {
+  try {
+    const userList = await userService.getAllUsers();
+    return res.status(200).send(userList);
+    f;
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send({ message: err.message });
+  }
+};
+
 const getUserById = async (req, res) => {
   try {
     const user = await userService.getUserById(req.params.id);
@@ -60,4 +71,10 @@ const deleteUserById = async (req, res) => {
   }
 };
 
-module.exports = { addNewUser, getUserById, updateUserById, deleteUserById };
+module.exports = {
+  addNewUser,
+  getUserById,
+  getAllUsers,
+  updateUserById,
+  deleteUserById,
+};

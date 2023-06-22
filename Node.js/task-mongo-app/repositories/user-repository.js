@@ -27,6 +27,12 @@ const getUserById = async (userId) => {
   return user;
 };
 
+const getAllUsers = async () => {
+  const userList = await User.find();
+  console.log(`Fetched all users! Total count: ${userList.length}`);
+  return userList;
+};
+
 const updateUserById = async (userId, updateObject) => {
   const updateResult = await User.updateOne(
     { _id: userId },
@@ -54,4 +60,10 @@ const deleteUserById = async (userId) => {
   return false;
 };
 
-module.exports = { addNewUser, getUserById, updateUserById, deleteUserById };
+module.exports = {
+  addNewUser,
+  getUserById,
+  getAllUsers,
+  updateUserById,
+  deleteUserById,
+};
