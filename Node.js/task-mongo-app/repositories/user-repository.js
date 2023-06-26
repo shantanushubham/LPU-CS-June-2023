@@ -60,10 +60,23 @@ const deleteUserById = async (userId) => {
   return false;
 };
 
+const getUserByEmail = async (email) => {
+  let user = await User.findOne({ email });
+  if (!user) {
+    console.log(`User with email: ${email} does not exist in the database.`);
+    return null;
+  }
+  console.log(
+    `User with ID: ${email} was successfully fetched from the database.`
+  );
+  return user;
+};
+
 module.exports = {
   addNewUser,
   getUserById,
   getAllUsers,
   updateUserById,
   deleteUserById,
+  getUserByEmail,
 };

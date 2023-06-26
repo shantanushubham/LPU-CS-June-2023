@@ -71,10 +71,22 @@ const deleteUserById = async (req, res) => {
   }
 };
 
+const loginUser = async (req, res) => {
+  try {
+    let { email, password } = req.body;
+    let user = await userService.loginUser(email, password);
+    return res.status(200).send(user);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send({ message: err.message });
+  }
+};
+
 module.exports = {
   addNewUser,
   getUserById,
   getAllUsers,
   updateUserById,
   deleteUserById,
+  loginUser,
 };

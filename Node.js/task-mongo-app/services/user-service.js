@@ -1,5 +1,6 @@
 const userRepository = require("../repositories/user-repository");
 const InvalidInputException = require("../exceptions/InvalidInputException");
+const User = require("../models/User");
 
 const USER_EDITABLE_FIELDS = ["name", "age", "password"];
 
@@ -38,10 +39,15 @@ const deleteUserById = async (userId) => {
   return isDeleted;
 };
 
+const loginUser = async (email, password) => {
+  return await User.findByEmailAndPasswordForAuth(email, password);
+};
+
 module.exports = {
   addNewUser,
   getUserById,
   getAllUsers,
   updateUserById,
   deleteUserById,
+  loginUser,
 };
