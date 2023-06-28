@@ -1,12 +1,14 @@
 const userRepository = require("../repositories/user-repository");
 const InvalidInputException = require("../exceptions/InvalidInputException");
 const User = require("../models/User");
+const { generateToken } = require("../jwt");
 
 const USER_EDITABLE_FIELDS = ["name", "age", "password"];
 
 const addNewUser = async (user) => {
   user = await userRepository.addNewUser(user);
-  return user;
+  let token = generateToken(user._id);
+  return { user, token };
 };
 
 const getUserById = async (id) => {
@@ -40,7 +42,9 @@ const deleteUserById = async (userId) => {
 };
 
 const loginUser = async (email, password) => {
-  return await User.findByEmailAndPasswordForAuth(email, password);
+  let user = await User.findByEmailAndPasswordForAuth(email, password);
+  let token = generateToken(user._id);
+  return { user, token };
 };
 
 module.exports = {

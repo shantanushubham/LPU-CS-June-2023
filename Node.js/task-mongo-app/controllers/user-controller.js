@@ -82,6 +82,10 @@ const loginUser = async (req, res) => {
   }
 };
 
+const getCurrentUser = (req, res) => {
+  return res.status(200).send(req.user);
+};
+
 module.exports = {
   addNewUser,
   getUserById,
@@ -89,4 +93,5 @@ module.exports = {
   updateUserById,
   deleteUserById,
   loginUser,
+  getCurrentUser,
 };
