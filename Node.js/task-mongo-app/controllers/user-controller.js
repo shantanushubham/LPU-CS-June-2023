@@ -39,6 +39,20 @@ const getUserById = async (req, res) => {
   }
 };
 
+const getUserInfoWithTasks = async (req, res) => {
+  try {
+    let user = req.user;
+    await userService.getUserInfoWithTasks(user);
+    console.log(
+      `User info with Tasks for user ID: ${user._id} was successfully fetched.`
+    );
+    return res.status(200).send(user);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send({ message: err.message });
+  }
+};
+
 const updateUserById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -82,8 +96,18 @@ const loginUser = async (req, res) => {
   }
 };
 
-const getCurrentUser = (req, res) => {
-  return res.status(200).send(req.user);
+const logoutUser = async (req, res) => {
+  try {
+    const { user, token: sentToken } = req;
+    user.tokens = user.tokens.filter(
+      (tokenObject) => sentToken !== tokenObject.token
+    );
+    user.save();
+    return res.status(200).send();
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send({ message: err.message });
+  }
 };
 
 module.exports = {
@@ -93,5 +117,6 @@ module.exports = {
   updateUserById,
   deleteUserById,
   loginUser,
-  getCurrentUser,
+  getUserInfoWithTasks,
+  logoutUser,
 };

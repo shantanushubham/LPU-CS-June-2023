@@ -9,6 +9,7 @@ router.get("/get/all", authMiddleware, userController.getAllUsers);
 router.put("/:id", authMiddleware, userController.updateUserById);
 router.delete("/:id", authMiddleware, userController.deleteUserById);
 router.post("/login", userController.loginUser);
-router.get("/current/me", authMiddleware, userController.getCurrentUser);
+router.post("/logout", authMiddleware, userController.logoutUser);
+router.get("/current/me", authMiddleware, userController.getUserInfoWithTasks);
 
 module.exports = router;

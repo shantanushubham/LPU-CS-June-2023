@@ -1,13 +1,12 @@
 const userRepository = require("../repositories/user-repository");
 const InvalidInputException = require("../exceptions/InvalidInputException");
 const User = require("../models/User");
-const { generateToken } = require("../jwt");
 
 const USER_EDITABLE_FIELDS = ["name", "age", "password"];
 
 const addNewUser = async (user) => {
   user = await userRepository.addNewUser(user);
-  let token = generateToken(user._id);
+  const token = user.generateToken();
   return { user, token };
 };
 
@@ -18,6 +17,11 @@ const getUserById = async (id) => {
 
 const getAllUsers = async () => {
   return await userRepository.getAllUsers();
+};
+
+const getUserInfoWithTasks = async (user) => {
+  await user.populate("tasks");
+  return user;
 };
 
 const updateUserById = async (userId, dataToUpdate) => {
@@ -43,7 +47,7 @@ const deleteUserById = async (userId) => {
 
 const loginUser = async (email, password) => {
   let user = await User.findByEmailAndPasswordForAuth(email, password);
-  let token = generateToken(user._id);
+  const token = user.generateToken();
   return { user, token };
 };
 
@@ -54,4 +58,5 @@ module.exports = {
   updateUserById,
   deleteUserById,
   loginUser,
+  getUserInfoWithTasks,
 };
