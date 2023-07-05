@@ -24,20 +24,21 @@ const getUserInfoWithTasks = async (user) => {
   return user;
 };
 
-const updateUserById = async (userId, dataToUpdate) => {
-  let updateObject = {};
-  USER_EDITABLE_FIELDS.forEach(
-    (field) =>
-      dataToUpdate[field] && (updateObject[field] = dataToUpdate[field])
-  );
-  if (Object.keys(updateObject).length) {
-    const isUpdated = await userRepository.updateUserById(userId, updateObject);
-    return isUpdated;
+const updateUserById = async (user, dataToUpdate) => {
+  const parametersToUpdate = Object.keys(dataToUpdate);
+  const isValidUpdate = parametersToUpdate.every((parameter) => {
+    return USER_EDITABLE_FIELDS.includes(parameter);
+  });
+  if (!isValidUpdate) {
+    throw new InvalidInputException(
+      "User",
+      "Please enter valid fields for the entity."
+    );
   }
-  throw new InvalidInputException(
-    "User",
-    "Please enter valid fields for the entity."
-  );
+  parametersToUpdate.forEach((parameter) => {
+    user[parameter] = dataToUpdate[parameter];
+  });
+  await user.save();
 };
 
 const deleteUserById = async (userId) => {

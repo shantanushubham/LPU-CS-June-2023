@@ -3,7 +3,8 @@ const taskService = require("../services/task-service");
 
 const addNewTask = async (req, res) => {
   try {
-    const { title, description, owner } = req.body;
+    const { title, description } = req.body;
+    const owner = req.user._id;
     let task = { title, description, owner };
     task = await taskService.addNewTask(task);
     return res.status(201).send(task);
@@ -65,4 +66,32 @@ const updateTaskById = async (req, res) => {
   }
 };
 
-module.exports = { addNewTask, getTaskById, deleteTaskById, updateTaskById };
+const getTasksForUser = async (req, res) => {
+  try {
+    let user = req.user;
+    let pageNumber = req.query.pageNumber;
+    let pageSize = req.query.pageSize;
+    let all = req.query.all;
+    let sortBy = req.query.sortBy;
+    all = all === "true"
+    if (pageNumber && pageSize) {
+      pageNumber = parseInt(pageNumber);
+      pageSize = parseInt(pageSize);
+    }
+    let tasks = await taskService.getTasksForUser(
+      user, all, pageSize, pageNumber, sortBy);
+    console.log(`We found: ${tasks.length} records.`);
+    return res.status(200).send(tasks);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send({ message: err.message });
+  }
+};
+
+module.exports = {
+  addNewTask,
+  getTaskById,
+  deleteTaskById,
+  updateTaskById,
+  getTasksForUser,
+};

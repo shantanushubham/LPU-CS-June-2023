@@ -55,13 +55,9 @@ const getUserInfoWithTasks = async (req, res) => {
 
 const updateUserById = async (req, res) => {
   try {
-    const { id } = req.params;
-    let dataToUpdate = req.body;
-    const isUpdated = await userService.updateUserById(id, dataToUpdate);
-    if (isUpdated) {
-      return res.status(200).send({ message: "Update Successful" });
-    }
-    return res.status(404).send({ message: "Update Failed!" });
+    const { user, body: dataToUpdate } = req;
+    await userService.updateUserById(user, dataToUpdate);
+    return res.status(200).send({ message: "Update Successful." });
   } catch (err) {
     console.error(err);
     if (err instanceof InvalidInputException) {
@@ -73,8 +69,8 @@ const updateUserById = async (req, res) => {
 
 const deleteUserById = async (req, res) => {
   try {
-    const { id } = req.params;
-    const isDeleted = await userService.deleteUserById(id);
+    const { user } = req;
+    const isDeleted = await userService.deleteUserById(user._id);
     if (isDeleted) {
       return res.status(200).send({ message: "Delete Successful" });
     }
@@ -110,6 +106,18 @@ const logoutUser = async (req, res) => {
   }
 };
 
+const logoutUserFromEverywhere = async (req, res) => {
+  try {
+    const { user } = req;
+    user.tokens = [];
+    user.save();
+    return res.status(200).send();
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send({ message: err.message });
+  }
+};
+
 module.exports = {
   addNewUser,
   getUserById,
@@ -119,4 +127,5 @@ module.exports = {
   loginUser,
   getUserInfoWithTasks,
   logoutUser,
+  logoutUserFromEverywhere,
 };
