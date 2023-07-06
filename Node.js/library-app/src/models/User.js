@@ -1,5 +1,7 @@
 const { model, Schema } = require("mongoose");
 const { isEmail } = require("validator");
+const { encryptPassword, checkPassword } = require("../bcrypt");
+const { generateToken } = require("../jwt");
 
 const UserSchema = new Schema(
   {
@@ -10,6 +12,7 @@ const UserSchema = new Schema(
       lowercase: true,
       trim: true,
       required: true,
+      unique: true,
       validate: {
         validator(email) {
           return isEmail(email);
@@ -58,7 +61,7 @@ const UserSchema = new Schema(
     },
     joiningDate: {
       type: Date,
-      required: true,
+      default: new Date(),
       validate: {
         validator(date) {
           if (date > new Date()) {
@@ -76,6 +79,47 @@ const UserSchema = new Schema(
     timestamps: true,
   }
 );
+
+UserSchema.pre("save", async function (next) {
+  const user = this;
+  if (user.modifiedPaths().includes("password")) {
+    user.password = await encryptPassword(user.password);
+  }
+  next();
+});
+
+UserSchema.statics.findByEmailAndPasswordForAuth = async (email, password) => {
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      throw new Error(`Login Failed.`);
+    }
+    const encryptedPassword = user.password;
+    const isMatch = await checkPassword(password, encryptedPassword);
+    if (!isMatch) {
+      throw new Error("Login Failed.");
+    }
+    console.log("Login Success!");
+    return user;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+};
+
+UserSchema.methods.generateToken = function () {
+  const user = this;
+  const token = generateToken(user);
+  user.tokens.push({ token });
+  user.save();
+  return token;
+};
+
+UserSchema.methods.toJSON = function () {
+  let user = this.toObject();
+  delete user.tokens;
+  return user;
+};
 
 const User = model("User", UserSchema);
 
