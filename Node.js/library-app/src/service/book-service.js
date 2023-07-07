@@ -14,4 +14,27 @@ const addBook = async (book) => {
   }
 };
 
+const getBookByIsbn = async (isbnNumber) => {
+  const book = await Book.findOne({ isbnNumber });
+  return book;
+};
+
+const getBooksByFilter = async (filterObject) => {
+  const bookList = await Book.find(filterObject);
+  return bookList;
+};
+
+const updateBookQuantity = async (isbnNumber, bookQuantity) => {
+  const updateResult = await Book.updateOne(
+    { isbnNumber },
+    { $set: { quantity: bookQuantity } }
+  );
+  return updateResult.matchedCount > 0;
+};
+
+const deleteBook = async (isbnNumber) => {
+  const deleteResult = await Book.deleteOne({ isbnNumber });
+  return deleteResult.deletedCount > 0;
+};
+
 module.exports = { addBook };
